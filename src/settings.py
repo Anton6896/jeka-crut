@@ -1,6 +1,6 @@
-import logging.config
 import os
 from pydantic import BaseSettings
+import logging
 
 
 class Settings(BaseSettings):
@@ -21,21 +21,12 @@ class Settings(BaseSettings):
             'port': self.POSTGRES_PORT
         }
 
-
-def update_logging():
-    from uvicorn.config import LOGGING_CONFIG
-
-    LOGGING_CONFIG['formatters']['default']['fmt'] = \
-        '%(asctime)s [%(name)14s] %(levelprefix)s %(message)s'
-    LOGGING_CONFIG['formatters']['access']['fmt'] = \
-        '%(asctime)s [%(name)14s] %(levelprefix)s %(client_addr)s - \'%(request_line)s\' %(status_code)s'
-    LOGGING_CONFIG['loggers']['storer'] = {
-        'handlers': ['default'],
-        'formatter': 'default',
-        'level': 'DEBUG',
-        'propagate': True
-    }
-    logging.config.dictConfig(LOGGING_CONFIG)
+    def init_logger(self):
+        logging.basicConfig(
+            format='%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',
+            datefmt='%Y-%m-%d:%H:%M:%S',
+            level=logging.DEBUG
+        )
 
 
 settings = Settings()
