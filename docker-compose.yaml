@@ -1,0 +1,19 @@
+version: '3.2'
+
+volumes:
+  pg-data:
+    driver: local
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=jekakrut
+      - POSTGRES_USER=jeka
+      - POSTGRES_PASSWORD=krut
+    restart: always
