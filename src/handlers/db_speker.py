@@ -39,12 +39,35 @@ class DBConnector:
         except Exception as e:
             logger.exception(f'unable to ensure db : \n{e}')
 
+    def table_get_all(self, table_name: str):
+        logger.info(f'getting all data from table : {table_name}')
+        try:
+            with self.get_connection().cursor() as cur:
+                q = f"SELECT * FROM {table_name}"
+                cur.execute(q)
+
+                serialized_data = []
+
+                for table in cur.fetchall():
+                    serialized_data.append({
+                        'id': table[0],
+                        'username': table[1],
+                        'data': table[2],
+                        'timestamp': table[3].strftime("%m/%d/%Y, %H:%M:%S")
+                    })
+
+                return serialized_data
+
+        except Exception as e:
+            logger.exception(f'unable to fetch data from db : \n{e}')
+
     def table_insert(self, data: dict, table_name: str) -> bool:
         logger.info(f'inserting to table : {table_name}')
         try:
             with self.get_connection().cursor() as cur:
                 keys_items = []
                 values_items = []
+
                 for key, value in data.items():
                     if key and value:
                         keys_items.append(key)
@@ -55,9 +78,9 @@ class DBConnector:
                 q = f"INSERT INTO {table_name} ({columns}) values ("
                 for item in values_items:
                     if item == values_items[-1]:
-                        q += f"'{value}');"
+                        q += f"'{item}');"
                     else:
-                        q += f"'{value}',"
+                        q += f"'{item}',"
 
                 logger.info(f'query \n - {q}')
 

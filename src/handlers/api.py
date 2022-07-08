@@ -13,8 +13,13 @@ api_router = APIRouter()
 
 @api_router.get('/user')
 def get_users():
-    logger.info('getting hello world')
-    return {'msg': 'get_users'}
+    logger.info('getting all users request')
+    res = DBConnector().table_get_all('user_table')
+
+    if res:
+        return res
+
+    return {'error': f'cant show all users'}
 
 
 @api_router.get('/user/{name}')
@@ -35,5 +40,5 @@ def create_user(user: User):
 
 @api_router.patch('/user')
 def update_user():
-    logger.info('getting hello world')
+    logger.info('updating user')
     return {'msg': 'updating user'}
