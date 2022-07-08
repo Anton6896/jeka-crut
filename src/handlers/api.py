@@ -1,11 +1,13 @@
 import logging
 from fastapi import APIRouter
 
-
 logger = logging.getLogger(__name__)
 api_router = APIRouter()
 
+
 # http://localhost:8001/api/user
+
+
 @api_router.get('/user')
 def get_users():
     logger.info('getting hello world')
@@ -16,7 +18,6 @@ def get_users():
 def get_user(name: str):
     logger.info('getting hello world')
     return {'msg': f'get user {name}'}
-
 
 
 @api_router.post('/user')

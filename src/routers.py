@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from handlers.api import api_router
+from src.handlers.api import api_router
 
 router = APIRouter()
 
