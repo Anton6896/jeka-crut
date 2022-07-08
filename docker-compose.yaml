@@ -17,3 +17,12 @@ services:
       - POSTGRES_USER=jeka
       - POSTGRES_PASSWORD=krut
     restart: always
+
+  app:
+    build: .
+    command: uvicorn src.main:app --reload --reload-dir /opt/src --host 0.0.0.0 --port 8001
+    ports:
+      - '8001:8001'
+    volumes:
+      - ./src:/opt/src
+    restart: always
