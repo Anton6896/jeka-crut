@@ -25,4 +25,6 @@ services:
       - '8001:8001'
     volumes:
       - ./src:/opt/src
+    environment:
+      - POSTGRES_HOST=postgres
     restart: always
