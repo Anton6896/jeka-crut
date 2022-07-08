@@ -1,5 +1,8 @@
+import json
 import logging
 from fastapi import APIRouter
+from src.handlers.models import User
+from src.handlers.db_speker import DBConnector
 
 logger = logging.getLogger(__name__)
 api_router = APIRouter()
@@ -21,9 +24,13 @@ def get_user(name: str):
 
 
 @api_router.post('/user')
-def create_user():
-    logger.info('getting hello world')
-    return {'msg': 'creating user'}
+def create_user(user: User):
+    logger.info(f'creating new user, \n{json.dumps(user.serialize(), indent=2)}')
+    res = DBConnector().table_insert(user.serialize(), user.get_table_name())
+    if res:
+        return {'msg': f'user {user.username} created index: {res}'}
+
+    return {'error': f'not created'}
 
 
 @api_router.patch('/user')
